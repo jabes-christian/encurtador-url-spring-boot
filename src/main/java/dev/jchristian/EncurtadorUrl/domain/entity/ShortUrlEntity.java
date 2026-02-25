@@ -8,6 +8,7 @@ import java.time.Instant;
 @Entity
 @Table(name = "short_urls")
 public class ShortUrlEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "short_urls_id_gen")
     @SequenceGenerator(name = "short_urls_id_gen", sequenceName = "short_urls_id_seq", allocationSize = 1)

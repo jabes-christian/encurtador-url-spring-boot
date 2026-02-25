@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface ShortUrlRepository extends JpaRepository<ShortUrlEntity, Long> {
-    @Query("select su from ShortUrlEntity su where su.isPrivate = false order by su.createdAt desc")
+    @Query("select su from ShortUrlEntity su left join su.createdBy where su.isPrivate = false order by su.createdAt desc")
     List<ShortUrlEntity> findPublicShortUrls();
 }
 
