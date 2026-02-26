@@ -1,4 +1,4 @@
-package dev.jchristian.EncurtadorUrl.domain.controller;
+package dev.jchristian.EncurtadorUrl.web.controller;
 
 import dev.jchristian.EncurtadorUrl.domain.Service.ShortUrlService;
 import dev.jchristian.EncurtadorUrl.domain.entity.ShortUrlEntity;

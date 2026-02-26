@@ -14,6 +14,28 @@
         <p class="lead">Um serviço simples para encurtar URLs. Crie links curtos e fáceis de compartilhar.</p>
     </div>
 
+    <div class="card mt-4">
+        <div class="card-header">
+            <h5 class="card-title mb-0">Criar URL encurtada</h5>
+        </div>
+        <div class="card-body">
+            <form th:action="@{/short-urls}" method="post"
+                  th:object="${createShortUrlForm}">
+                <div class="mb-3">
+                    <label for="originalUrl" class="form-label">URL Original</label>
+                    <input type="text" class="form-control" id="originalUrl"
+                           th:field="*{originalUrl}"
+                           placeholder="https://example.com/my-long-url">
+                    <div class="text-danger"
+                         th:if="${#fields.hasErrors('originalUrl')}"
+                         th:errors="*{originalUrl}"></div>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Encurtar URL</button>
+            </form>
+        </div>
+    </div>
+
     <h2 class="mt-5">URLs públicas encurtadas</h2>
     <div th:if="${shortUrls.isEmpty()}" class="alert alert-info">
         Ainda não foram criados URLs públicos.
