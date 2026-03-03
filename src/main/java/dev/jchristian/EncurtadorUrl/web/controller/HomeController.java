@@ -3,6 +3,7 @@ package dev.jchristian.EncurtadorUrl.web.controller;
 import dev.jchristian.EncurtadorUrl.ApplicationProperties;
 import dev.jchristian.EncurtadorUrl.domain.Service.ShortUrlService;
 import dev.jchristian.EncurtadorUrl.domain.entity.ShortUrlEntity;
+import dev.jchristian.EncurtadorUrl.domain.exceptions.ShortUrlNotFoundException;
 import dev.jchristian.EncurtadorUrl.domain.models.CreateShortUrlCmd;
 import dev.jchristian.EncurtadorUrl.domain.models.ShortUrlDto;
 import dev.jchristian.EncurtadorUrl.web.dtos.CreateShortUrlForm;
@@ -12,10 +13,12 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class HomeController {
@@ -58,6 +61,16 @@ public class HomeController {
 
         }
         return "redirect:/";
+    }
+
+    @GetMapping("/s/{shortKey}")
+    String redirectToOriginalUrl(@PathVariable String shortKey) {
+        Optional<ShortUrlDto> shortUrlDtoOptional = shortUrlService.accessShortUrl(shortKey);
+        if(shortUrlDtoOptional.isEmpty()) {
+            throw new ShortUrlNotFoundException("Chave curta inválida: "+shortKey);
+        }
+        ShortUrlDto shortUrlDto = shortUrlDtoOptional.get();
+        return "redirect:"+shortUrlDto.originalUrl();
     }
 
 }
