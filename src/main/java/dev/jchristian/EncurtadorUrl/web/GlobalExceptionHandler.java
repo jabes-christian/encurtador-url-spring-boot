@@ -21,3 +21,5 @@ public class GlobalExceptionHandler {
         log.error("Exceção não tratada: {}", ex.getMessage(), ex);
         return "error/500";
     }
+
+}
