@@ -3,6 +3,7 @@ package dev.jchristian.EncurtadorUrl.web.controller;
 import dev.jchristian.EncurtadorUrl.ApplicationProperties;
 import dev.jchristian.EncurtadorUrl.domain.Service.ShortUrlService;
 import dev.jchristian.EncurtadorUrl.domain.entity.ShortUrlEntity;
+import dev.jchristian.EncurtadorUrl.domain.entity.UserEntity;
 import dev.jchristian.EncurtadorUrl.domain.exceptions.ShortUrlNotFoundException;
 import dev.jchristian.EncurtadorUrl.domain.models.CreateShortUrlCmd;
 import dev.jchristian.EncurtadorUrl.domain.models.ShortUrlDto;
@@ -24,14 +25,19 @@ import java.util.Optional;
 public class HomeController {
     private final ShortUrlService shortUrlService;
     private final ApplicationProperties properties;
+    private final SecurityUtils securityUtils;
 
-    public HomeController(ShortUrlService shortUrlService, ApplicationProperties properties) {
+    public HomeController(ShortUrlService shortUrlService, ApplicationProperties properties, SecurityUtils securityUtils) {
         this.shortUrlService = shortUrlService;
         this.properties = properties;
+        this.securityUtils = securityUtils;
     }
 
     @GetMapping("/")
     public String home(Model model) {
+
+        UserEntity currentUser = securityUtils.getCurrentUser();
+
         List<ShortUrlDto> shortUrls = shortUrlService.findAllPublicShortUrls();
         model.addAttribute("shortUrls", shortUrls);
         model.addAttribute("baseUrl", properties.baseUrl());
@@ -71,6 +77,11 @@ public class HomeController {
         }
         ShortUrlDto shortUrlDto = shortUrlDtoOptional.get();
         return "redirect:"+shortUrlDto.originalUrl();
+    }
+
+    @GetMapping("/login")
+    String loginForm() {
+        return "login";
     }
 
 }
