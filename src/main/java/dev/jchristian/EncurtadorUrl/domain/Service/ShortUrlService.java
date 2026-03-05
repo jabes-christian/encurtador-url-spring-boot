@@ -5,7 +5,12 @@ import dev.jchristian.EncurtadorUrl.domain.Repository.ShortUrlRepository;
 import dev.jchristian.EncurtadorUrl.domain.Repository.UserRepository;
 import dev.jchristian.EncurtadorUrl.domain.entity.ShortUrlEntity;
 import dev.jchristian.EncurtadorUrl.domain.models.CreateShortUrlCmd;
+import dev.jchristian.EncurtadorUrl.domain.models.PagedResult;
 import dev.jchristian.EncurtadorUrl.domain.models.ShortUrlDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,9 +41,12 @@ public class ShortUrlService {
         this.userRepository = userRepository;
     }
 
-    public List<ShortUrlDto> findAllPublicShortUrls() {
-        return shortUrlRepository.findPublicShortUrls()
-                .stream().map(entityMapper::toShortUrlDto).toList();
+    public PagedResult<ShortUrlDto> findAllPublicShortUrls(int pageNo, int pageSize) {
+        pageNo = pageNo > 1? pageNo - 1 : 0;
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(Sort.Direction.DESC, "createdAt"));
+        Page<ShortUrlDto> shortUrlDtoPage = shortUrlRepository.findPublicShortUrls(pageable)
+                .map(entityMapper::toShortUrlDto);
+        return PagedResult.from(shortUrlDtoPage);
     }
 
     @Transactional
