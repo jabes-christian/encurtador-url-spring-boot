@@ -23,4 +23,9 @@ public class SecurityUtils {
         }
         return null;
     }
+
+    public Long getCurrentUserId() {
+        UserEntity user = getCurrentUser();
+        return user != null ? user.getId() : null;
+    }
 }
