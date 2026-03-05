@@ -5,6 +5,7 @@ import dev.jchristian.EncurtadorUrl.domain.entity.ShortUrlEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
@@ -17,5 +18,13 @@ public interface ShortUrlRepository extends JpaRepository<ShortUrlEntity, Long> 
     boolean existsByShortKey(String shortKey);
 
     Optional<ShortUrlEntity> findByShortKey(String shortKey);
+
+    Page<ShortUrlEntity> findByCreatedById(Long userId, Pageable pageable);
+
+    @Modifying
+    void deleteByIdInAndCreatedById(List<Long> ids, Long userId);
+
+    @Query("select u from ShortUrl u left join fetch u.createdBy")
+    Page<ShortUrlEntity> findAllShortUrls(Pageable pageable);
 }
 
