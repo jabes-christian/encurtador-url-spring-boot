@@ -12,7 +12,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
-      - db-agendamento-network
+      - encurtador-network
     healthcheck:
       test: [ "CMD-SHELL", "pg-isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}" ]
       interval: 10s
@@ -38,5 +38,5 @@ volumes:
   postgres_data:
     driver: local
 networks:
-  db-agendamento-network:
+  encurtador-network:
     driver: bridge
